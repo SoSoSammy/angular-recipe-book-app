@@ -1,12 +1,18 @@
 <div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-success">New Recipe</button>
-    </div><!-- end .col-xs-12 -->
-</div><!-- end .row -->
-<hr>
+  <div class="col-xs-12">
+    <button class="btn btn-success">New Recipe</button>
+  </div>
+  <!-- end .col-xs-12 -->
+</div>
+<!-- end .row -->
+<hr />
 <div class="row">
-    <div class="col-xs-12">
-      
-        <app-recipe-item (recipeSelected)="onRecipeSelected(recipeEl)" *ngFor="let recipeEl of recipes" [recipe]="recipeEl"></app-recipe-item>
-    </div><!-- end .col-xs-12 -->
-</div><!-- end .row -->
+  <div class="col-xs-12">
+    <app-recipe-item
+      *ngFor="let recipeEl of recipes"
+      [recipe]="recipeEl"
+    ></app-recipe-item>
+  </div>
+  <!-- end .col-xs-12 -->
+</div>
+<!-- end .row -->
