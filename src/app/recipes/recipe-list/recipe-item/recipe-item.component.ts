@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Recipe } from '../../recipe.model';
+import { RecipeService } from '../../recipe.service';
 
 @Component({
   selector: 'app-recipe-item',
@@ -10,11 +11,11 @@ import { Recipe } from '../../recipe.model';
 export class RecipeItemComponent {
   // Make recipe property accessible from outside the component
   @Input() recipe: Recipe;
-  // Make recipeSelected event listenable from outside the component
-  @Output() recipeSelected = new EventEmitter<void>(); // void because we don't pass in any data
-  
+
+  constructor(private recipeService: RecipeService) {}
+
   // Emit an event when the recipe is selected
-  onSelected(recipe: Recipe) {
-    this.recipeSelected.emit();
+  onSelected() {
+    this.recipeService.recipeSelected.emit(this.recipe);
   }
 }
