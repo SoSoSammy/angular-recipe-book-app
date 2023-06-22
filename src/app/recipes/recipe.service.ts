@@ -12,10 +12,10 @@ export class RecipeService {
       'A delicious matcha green tea cake!',
       'https://cf.foodista.com/content/fp/7cafpt65esowsd3f.jpg',
       [
-        new Ingredient('eggs', 2),
-        new Ingredient('all-purpose flour', '3/4 cup'),
-        new Ingredient('matcha green tea powder', '1 1/2 tablespoons'),
-        new Ingredient('raspberries', '1/2 cup'),
+        new Ingredient('Eggs', 2),
+        new Ingredient('All-purpose flour', '3/4 cup'),
+        new Ingredient('Matcha green tea powder', '1 1/2 tablespoons'),
+        new Ingredient('Raspberries', '1/2 cup'),
       ]
     ),
     new Recipe(
@@ -23,9 +23,9 @@ export class RecipeService {
       'Easy to make sourdough bread!',
       'https://th.bing.com/th/id/OIP.1GvKGEtfYmOpxwi-zj_vpQHaE6?pid=ImgDet&rs=1',
       [
-        new Ingredient('whole-wheat flour', '6 cups'),
-        new Ingredient('sourdough starter', '1/4 cup'),
-        new Ingredient('salt', '1 tsp'),
+        new Ingredient('Whole-wheat flour', '6 cups'),
+        new Ingredient('Sourdough starter', '1/4 cup'),
+        new Ingredient('Salt', '1 tsp'),
       ]
     ),
   ];
