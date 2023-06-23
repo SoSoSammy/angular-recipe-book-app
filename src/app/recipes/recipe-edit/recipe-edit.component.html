@@ -12,7 +12,9 @@
             >
               Save
             </button>
-            <button type="button" class="btn btn-danger">Cancel</button>
+            <button type="button" class="btn btn-danger" routerLink="../">
+              Cancel
+            </button>
           </div>
           <!-- end .btn-toolbar -->
         </div>
@@ -48,6 +50,7 @@
               id="imagePath"
               formControlName="imagePath"
               class="form-control"
+              #imagePath
             />
           </div>
           <!-- end .form-group -->
@@ -59,7 +62,7 @@
       <!-- Preview Image -->
       <div class="row">
         <div class="col-xs-12">
-          <img src="" class="img-responsive" />
+          <img [src]="imagePath.value" class="img-responsive" />
         </div>
         <!-- end .col-xs-12 -->
       </div>
@@ -111,7 +114,13 @@
 
             <!-- Delete Ingredient -->
             <div class="col-xs-2">
-              <button type="button" class="btn btn-danger">X</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="onDeleteIngredient(i)"
+              >
+                X
+              </button>
             </div>
             <!-- end .col-xs-2 -->
           </div>
