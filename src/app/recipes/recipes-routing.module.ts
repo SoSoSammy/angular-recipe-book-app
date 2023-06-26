@@ -10,7 +10,7 @@ import { RecipesComponent } from './recipes.component';
 
 const routes: Routes = [
   {
-    path: 'recipes',
+    path: '', // when we access recipes, we will already be in /recipes
     component: RecipesComponent,
     canActivate: [AuthGuard], // only logged in users can access recipes
     children: [
