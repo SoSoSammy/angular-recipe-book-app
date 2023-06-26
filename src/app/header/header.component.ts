@@ -30,7 +30,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // Store data
   onSaveData() {
-    this.dataStorageService.storeRecipes();
+    const recipes = this.recipeService.getRecipes();
+
+    // If the user is trying to save no recipes, display a warning message
+    if (recipes.length < 1) {
+      if (
+        confirm(
+          '⚠ Warning: This action will replace all existing recipes on your account with nothing ⚠'
+        )
+      )
+        this.dataStorageService.storeRecipes();
+    } else {
+      this.dataStorageService.storeRecipes();
+    }
   }
 
   // Retrieve data
