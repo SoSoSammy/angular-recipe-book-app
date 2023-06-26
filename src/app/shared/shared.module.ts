@@ -5,6 +5,7 @@ import { AlertComponent } from './alert/alert.component';
 import { DropdownDirective } from './dropdown/dropdown.directive';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { PlaceholderDirective } from './placeholder/placeholder.directive';
+import { LoggingService } from '../logging.service';
 
 @NgModule({
   declarations: [
@@ -21,5 +22,6 @@ import { PlaceholderDirective } from './placeholder/placeholder.directive';
     DropdownDirective,
     CommonModule,
   ],
+  providers: [LoggingService], // won't give same instance to lazy loaded modules
 })
 export class SharedModule {}

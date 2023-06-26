@@ -7,6 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { LoggingService } from './logging.service';
 
 @NgModule({
   // declarations has all components, directives, and pipes
@@ -22,5 +23,6 @@ import { CoreModule } from './core.module';
   ],
   // defines which component is available right in the index.html file (typically only 1)
   bootstrap: [AppComponent],
+  // providers: [LoggingService],
 })
 export class AppModule {}
