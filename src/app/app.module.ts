@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { LoggingService } from './logging.service';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   // declarations has all components, directives, and pipes
@@ -20,6 +21,7 @@ import { LoggingService } from './logging.service';
     AppRoutingModule,
     SharedModule,
     CoreModule,
+    StoreModule.forRoot({}, {}),
   ],
   // defines which component is available right in the index.html file (typically only 1)
   bootstrap: [AppComponent],
