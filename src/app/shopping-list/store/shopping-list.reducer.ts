@@ -8,11 +8,6 @@ export interface State {
   editedIngredientIndex: number;
 }
 
-// Define overall AppState type
-export interface AppState {
-  shoppingList: State;
-}
-
 const initialState: State = {
   ingredients: [new Ingredient('Apples', 5), new Ingredient('Tomatoes', 10)],
   editedIngredient: null,
