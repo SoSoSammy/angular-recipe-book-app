@@ -5,13 +5,16 @@ import { map, tap, filter } from 'rxjs/operators';
 import { Recipe } from '../recipes/recipe.model';
 import { RecipeService } from '../recipes/recipe.service';
 import { AuthService } from '../auth/auth.service';
+import * as fromApp from '../store/app.reducer';
+import { Store } from '@ngrx/store';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
   constructor(
     private http: HttpClient,
     private recipeService: RecipeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store<fromApp.AppState>
   ) {}
 
   storeRecipes() {
@@ -55,7 +58,11 @@ export class DataStorageService {
 
   private getUserId() {
     let userId: string;
-    this.authService.user.subscribe(user => (userId = user.id)).unsubscribe();
+    this.store
+      .select('auth')
+      .pipe(map(authState => authState.user))
+      .subscribe(user => (userId = user.id))
+      .unsubscribe();
     console.log(userId);
     return userId;
   }
