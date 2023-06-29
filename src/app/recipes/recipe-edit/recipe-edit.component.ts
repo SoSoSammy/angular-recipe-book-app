@@ -4,7 +4,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 
-import { RecipeService } from '../recipe.service';
 import * as fromApp from '../../store/app.reducer';
 import * as RecipesActions from '../store/recipe.actions';
 
@@ -23,7 +22,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private recipeService: RecipeService,
     private store: Store<fromApp.AppState>
   ) {}
 
@@ -50,7 +48,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     // If in edit mode, set default recipe values to recipe passed in from URL
     if (this.editMode) {
-      // const recipe = this.recipeService.getRecipe(this.id);
       this.storeSub = this.store
         .select('recipes')
         .pipe(
@@ -137,7 +134,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           newRecipe: this.recipeForm.value,
         })
       );
-    // else this.recipeService.addRecipe(this.recipeForm.value);
     else
       this.store.dispatch(new RecipesActions.AddRecipe(this.recipeForm.value));
 
