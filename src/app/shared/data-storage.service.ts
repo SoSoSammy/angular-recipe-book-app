@@ -4,16 +4,15 @@ import { map, tap, filter } from 'rxjs/operators';
 
 import { Recipe } from '../recipes/recipe.model';
 import { RecipeService } from '../recipes/recipe.service';
-import { AuthService } from '../auth/auth.service';
-import * as fromApp from '../store/app.reducer';
 import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as RecipesActions from '../recipes/store/recipe.actions';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
   constructor(
     private http: HttpClient,
     private recipeService: RecipeService,
-    private authService: AuthService,
     private store: Store<fromApp.AppState>
   ) {}
 
@@ -23,7 +22,7 @@ export class DataStorageService {
     // Get unique user id to put in URL for database
     const userId = this.getUserId();
 
-    // Override all existing recipes
+    // Override all existing recipes in database
     this.http
       .put(
         `https://angular-recipe-book-app-f5a71-default-rtdb.firebaseio.com/${userId}.json`,
@@ -52,7 +51,10 @@ export class DataStorageService {
           });
         }),
         // Execute code without altering data in observable
-        tap(recipes => this.recipeService.setRecipes(recipes))
+        tap(recipes => {
+          // this.recipeService.setRecipes(recipes);
+          this.store.dispatch(new RecipesActions.SetRecipes(recipes));
+        })
       );
   }
 
