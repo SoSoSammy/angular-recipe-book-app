@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { filter, map, switchMap } from 'rxjs';
+import { filter, map, switchMap, withLatestFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 import * as RecipesActions from './recipe.actions';
 import { Recipe } from '../recipe.model';
+import * as fromApp from '../../store/app.reducer';
 
 @Injectable()
 export class RecipeEffects {
@@ -12,10 +14,10 @@ export class RecipeEffects {
   // Fetch Recipes
   fetchRecipes = createEffect(() =>
     this.actions$.pipe(
-      ofType(RecipesActions.FETCH_RECIPES),
-      switchMap(() => {
+      ofType<RecipesActions.FetchRecipes>(RecipesActions.FETCH_RECIPES),
+      switchMap(action => {
         return this.http.get<Recipe[]>(
-          'https://angular-recipe-book-app-f5a71-default-rtdb.firebaseio.com/recipes.json'
+          `https://angular-recipe-book-app-f5a71-default-rtdb.firebaseio.com/${action.payload}.json`
         );
       }),
       // Only continue execution if recipes exists
@@ -34,5 +36,26 @@ export class RecipeEffects {
     )
   );
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  //////////////////////////////
+  // Store Recipes
+  storeRecipes = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType<RecipesActions.StoreRecipes>(RecipesActions.STORE_RECIPES), // put in userid as payload
+        withLatestFrom(this.store.select('recipes')), // merge a value from another observable into this observable stream
+        switchMap(([action, recipesState]) => {
+          return this.http.put(
+            `https://angular-recipe-book-app-f5a71-default-rtdb.firebaseio.com/${action.payload}.json`,
+            recipesState.recipes
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+    private store: Store<fromApp.AppState>
+  ) {}
 }
