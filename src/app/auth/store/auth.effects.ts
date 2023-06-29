@@ -23,10 +23,10 @@ export interface AuthResponseData {
 //////////////////////////////
 // Handle Authentication
 const handleAuthentication = (
+  expiresIn: number,
   email: string,
   userId: string,
-  token: string,
-  expiresIn: number
+  token: string
 ) => {
   const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
 
@@ -93,10 +93,10 @@ export class AuthEffects {
             }),
             map(resData =>
               handleAuthentication(
+                +resData.expiresIn,
                 resData.email,
-                resData.idToken,
                 resData.localId,
-                +resData.expiresIn
+                resData.idToken
               )
             ),
             // Handle any errors
@@ -130,10 +130,10 @@ export class AuthEffects {
             }),
             map(resData =>
               handleAuthentication(
+                +resData.expiresIn,
                 resData.email,
-                resData.idToken,
                 resData.localId,
-                +resData.expiresIn
+                resData.idToken
               )
             ),
             // Handle any errors
