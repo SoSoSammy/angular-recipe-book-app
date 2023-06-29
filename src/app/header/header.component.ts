@@ -1,13 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { map, Subscription } from 'rxjs';
+import { map, Subscription, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { DataStorageService } from '../shared/data-storage.service';
-import { AuthService } from '../auth/auth.service';
-import { RecipeService } from '../recipes/recipe.service';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
 import * as RecipeActions from '../recipes/store/recipe.actions';
+import { Recipe } from '../recipes/recipe.model';
 
 @Component({
   selector: 'app-header',
@@ -18,12 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
   collapsed = true;
 
-  constructor(
-    private dataStorageService: DataStorageService,
-    private authService: AuthService,
-    private recipeService: RecipeService,
-    private store: Store<fromApp.AppState>
-  ) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.userSub = this.store
@@ -38,7 +31,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // Store data
   onSaveData() {
-    const recipes = this.recipeService.getRecipes();
+    let recipes: Recipe[];
+    this.store
+      .select('recipes')
+      .pipe(map(recipesState => (recipes = recipesState.recipes)))
+      .subscribe()
+      .unsubscribe();
 
     // If the user is trying to save no recipes, display a warning message
     if (recipes.length < 1) {
@@ -47,24 +45,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
           '⚠ Warning: This action will replace all existing recipes on your account with nothing ⚠'
         )
       )
-        this.dataStorageService.storeRecipes();
+        this.store.dispatch(new RecipeActions.StoreRecipes(this.getUserId()));
     } else {
-      this.dataStorageService.storeRecipes();
+      this.store.dispatch(new RecipeActions.StoreRecipes(this.getUserId()));
     }
   }
 
   // Retrieve data
   onFetchData() {
     // this.dataStorageService.fetchRecipes().subscribe();
-    this.store.dispatch(new RecipeActions.FetchRecipes());
+    this.store.dispatch(new RecipeActions.FetchRecipes(this.getUserId()));
   }
 
   onLogout() {
     this.store.dispatch(new AuthActions.Logout());
-    this.recipeService.setRecipes([]);
+    this.store.dispatch(new RecipeActions.SetRecipes([]));
   }
 
   ngOnDestroy() {
     this.userSub.unsubscribe();
+  }
+
+  private getUserId() {
+    let userId: string;
+    this.store
+      .select('auth')
+      .pipe(map(authState => authState.user))
+      .subscribe(user => (userId = user.id))
+      .unsubscribe();
+    console.log(userId);
+    return userId;
   }
 }
