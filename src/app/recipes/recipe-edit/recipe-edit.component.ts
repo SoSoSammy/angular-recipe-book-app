@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
 import { RecipeService } from '../recipe.service';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -17,7 +20,8 @@ export class RecipeEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
@@ -39,28 +43,40 @@ export class RecipeEditComponent implements OnInit {
 
     // If in edit mode, set default recipe values to recipe passed in from URL
     if (this.editMode) {
-      const recipe = this.recipeService.getRecipe(this.id);
-      recipeName = recipe.name;
-      recipeImagePath = recipe.imagePath;
-      recipeDescription = recipe.description;
-
-      // If the recipe has ingredients, create a new form group for each ingredient
-      if (recipe.ingredients) {
-        recipe.ingredients.forEach(ingredient =>
-          recipeIngredients.push(
-            // name of this FormGroup is its index in the FormArray
-            new FormGroup({
-              name: new FormControl(ingredient.name, Validators.required),
-              amount: new FormControl(ingredient.amount, Validators.required),
-              // If wanted to do number validation, do:
-              // amount: new FormControl(ingredient.amount, [
-              //   Validators.required,
-              //   Validators.pattern(/^[1-9]+[0-9]*$/),
-              // ]),
-            })
+      // const recipe = this.recipeService.getRecipe(this.id);
+      this.store
+        .select('recipes')
+        .pipe(
+          map(recipesState =>
+            recipesState.recipes.find((recipe, index) => index === this.id)
           )
-        );
-      }
+        )
+        .subscribe(recipe => {
+          recipeName = recipe.name;
+          recipeImagePath = recipe.imagePath;
+          recipeDescription = recipe.description;
+
+          // If the recipe has ingredients, create a new form group for each ingredient
+          if (recipe.ingredients) {
+            recipe.ingredients.forEach(ingredient =>
+              recipeIngredients.push(
+                // name of this FormGroup is its index in the FormArray
+                new FormGroup({
+                  name: new FormControl(ingredient.name, Validators.required),
+                  amount: new FormControl(
+                    ingredient.amount,
+                    Validators.required
+                  ),
+                  // If wanted to do number validation, do:
+                  // amount: new FormControl(ingredient.amount, [
+                  //   Validators.required,
+                  //   Validators.pattern(/^[1-9]+[0-9]*$/),
+                  // ]),
+                })
+              )
+            );
+          }
+        });
     }
 
     // Fill out the form controls with the default value of '' or the recipe's values
