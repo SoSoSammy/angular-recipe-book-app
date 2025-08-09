@@ -2,16 +2,12 @@
 
 <br />
 <p align="center">
-  <a href="https://sososammy.github.io/angular-recipe-book-app/auth">
     <img width="800" alt="Angular Recipe Book" src="https://github.com/user-attachments/assets/304cf9b6-bcde-4719-b9ba-07d8fdd91f20" />
-  </a>
 
   <h3 align="center">Recipe Book</h3>
 
   <p align="center">
     A web-based recipe book where users can create custom recipes and generate ingredient shopping lists with one click.
-    <br />
-    <a href="https://sososammy.github.io/angular-recipe-book-app/auth"><strong>View Demo »</strong></a>
   </p>
 </p>
 
